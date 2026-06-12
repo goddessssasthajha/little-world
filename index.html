@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Astha 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sakura-light: #fce4ec;
+    --sakura-pink: #f48fb1;
+    --sakura-deep: #e91e8c;
+    --sakura-blush: #fdf0f5;
+    --petal-white: #fff5f8;
+    --text-dark: #3d1f2e;
+    --text-mid: #7b4060;
+    --gold: #f7c59f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--petal-white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── SAKURA PETALS ── */
+  .petal-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    top: -40px;
+    font-size: 18px;
+    opacity: 0.7;
+    animation: fall linear infinite;
+    user-select: none;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0.8; }
+    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); }
+    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
+  }
+
+  /* ── PAGES ── */
+  .page {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page.active { display: flex; flex-direction: column; }
+
+  /* ── LANDING PAGE ── */
+  #page-landing {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 60% 30%, #fce4ec 0%, #fdf0f5 60%, #fff5f8 100%);
+    min-height: 100vh;
+  }
+
+  .landing-inner { max-width: 480px; padding: 40px 20px; }
+
+  .sakura-icon {
+    font-size: 64px;
+    animation: float 3s ease-in-out infinite;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+  }
+
+  .landing-inner h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
+    color: var(--text-dark);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .landing-inner h1 span { color: var(--sakura-deep); font-style: italic; }
+
+  .landing-inner p {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--sakura-pink), var(--sakura-deep));
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(233, 30, 140, 0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(233, 30, 140, 0.35);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 2px solid var(--sakura-pink);
+    color: var(--sakura-deep);
+  }
+
+  .btn-ghost:hover {
+    background: var(--sakura-light);
+    transform: translateY(-2px);
+  }
+
+  /* ── NAV DOTS ── */
+  .nav-dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--sakura-pink);
+    opacity: 0.4;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-dot.active { opacity: 1; transform: scale(1.4); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .section-title span { color: var(--sakura-deep); font-style: italic; }
+
+  .section-sub {
+    text-align: center;
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 60px 20px 20px;
+    text-align: center;
+  }
+
+  .page-emoji { font-size: 40px; display: block; margin-bottom: 12px; }
+
+  /* ── FLASHCARD LYRICS PAGE ── */
+  #page-lyrics {
+    background: linear-gradient(160deg, #fce4ec 0%, #fff5f8 100%);
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .flashcard-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  .flashcard-wrapper {
+    position: relative;
+    height: auto;
+    margin-bottom: 24px;
+  }
+
+  .flashcard {
+    display: none;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(233,30,140,0.18);
+    flex-direction: column;
+    background: #fff;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .flashcard.active {
+    display: flex;
+  }
+
+  .card-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .card-photo-placeholder {
+    width: 100%;
+    height: 260px;
+    background: linear-gradient(135deg, var(--sakura-light), var(--sakura-pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+  }
+
+  .card-body {
+    padding: 20px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .card-song {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--sakura-deep);
+    margin-bottom: 4px;
+  }
+
+  .card-lyrics {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .card-playing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--sakura-pink);
+  }
+
+  .music-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+
+  .bar {
+    width: 3px;
+    background: var(--sakura-pink);
+    border-radius: 2px;
+    animation: musicbar 0.8s ease infinite;
+  }
+
+  .bar:nth-child(1) { animation-delay: 0s;    height: 6px; }
+  .bar:nth-child(2) { animation-delay: 0.15s; height: 12px; }
+  .bar:nth-child(3) { animation-delay: 0.3s;  height: 8px; }
+  .bar:nth-child(4) { animation-delay: 0.45s; height: 14px; }
+
+  @keyframes musicbar {
+    0%, 100% { transform: scaleY(0.5); }
+    50%       { transform: scaleY(1.4); }
+  }
+
+  .flashcard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .card-counter {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--sakura-light);
+    border: 1.5px solid var(--sakura-pink);
+    transition: background 0.3s;
+  }
+
+  .progress-dot.done { background: var(--sakura-pink); }
+
+  /* ── CONFESSION PAGE ── */
+  #page-confession {
+    background: linear-gradient(160deg, #fff5f8 0%, #fce4ec 100%);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .confession-inner {
+    max-width: 560px;
+    padding: 60px 28px;
+  }
+
+  .heart-big {
+    font-size: 72px;
+    animation: heartbeat 1.2s ease-in-out infinite;
+    display: block;
+    margin-bottom: 24px;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14%       { transform: scale(1.18); }
+    28%       { transform: scale(1); }
+    42%       { transform: scale(1.1); }
+    56%       { transform: scale(1); }
+  }
+
+  .confession-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--text-dark);
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+
+  .confession-text em { color: var(--sakura-deep); font-style: italic; }
+
+  .confession-sign {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    margin-bottom: 36px;
+  }
+
+  /* ── COUPLES PAGE ── */
+  #page-couples {
+    background: linear-gradient(160deg, #fdf0f5 0%, #fce4ec 100%);
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .couples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    width: 100%;
+  }
+
+  .couple-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 6px 28px rgba(233,30,140,0.12);
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s;
+    animation: floatCard 4s ease-in-out infinite;
+  }
+
+  .couple-card:nth-child(2) { animation-delay: 0.5s; }
+  .couple-card:nth-child(3) { animation-delay: 1s; }
+  .couple-card:nth-child(4) { animation-delay: 1.5s; }
+  .couple-card:nth-child(5) { animation-delay: 2s; }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  .couple-card:hover {
+    transform: translateY(-12px) !important;
+    box-shadow: 0 16px 48px rgba(233,30,140,0.22);
+  }
+
+  .couple-emoji { font-size: 44px; margin-bottom: 12px; display: block; }
+
+  .couple-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--sakura-deep);
+    margin-bottom: 6px;
+  }
+
+  .couple-line {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .couple-tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 14px;
+    background: var(--sakura-light);
+    border-radius: 50px;
+    font-size: 0.78rem;
+    color: var(--sakura-deep);
+    font-weight: 600;
+  }
+
+  /* ── EDITS PAGE ── */
+  #page-edits {
+    background: linear-gradient(160deg, #fce4ec 0%, #fff5f8 100%);
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .edits-inner {
+    max-width: 540px;
+    width: 100%;
+    padding: 60px 24px;
+    text-align: center;
+  }
+
+  .video-frame {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 16px 56px rgba(233,30,140,0.25);
+    margin-bottom: 28px;
+    position: relative;
+    background: #1a0a12;
+  }
+
+  .video-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2d0a1e, #5c1a3a);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .video-thumb:hover { filter: brightness(1.1); }
+
+  .play-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: transform 0.3s;
+  }
+
+  .video-thumb:hover .play-btn { transform: scale(1.15); }
+
+  video {
+    width: 100%;
+    border-radius: 24px;
+    display: none;
+  }
+
+  .video-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .video-sub {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+  }
+
+  /* ── PETAL DIVIDER ── */
+  .petal-divider {
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 8px;
+    color: var(--sakura-pink);
+    margin: 20px 0;
+  }
+
+  /* ── BACK / NAV BUTTON ── */
+  .page-nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  /* ── ENTRANCE ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 500px) {
+    .couples-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .couple-card { padding: 18px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Falling petals -->
+<div class="petal-canvas" id="petalCanvas"></div>
+
+<!-- Nav dots -->
+<div class="nav-dots" id="navDots">
+  <div class="nav-dot active" onclick="goTo('landing')" title="Home"></div>
+  <div class="nav-dot" onclick="goTo('lyrics')" title="Songs"></div>
+  <div class="nav-dot" onclick="goTo('confession')" title="Feelings"></div>
+  <div class="nav-dot" onclick="goTo('couples')" title="Us"></div>
+  <div class="nav-dot" onclick="goTo('edits')" title="Edits"></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 1 — LANDING
+═══════════════════════════════════ -->
+<div class="page active" id="page-landing">
+  <div class="landing-inner fade-up visible">
+    <span class="sakura-icon">🌸</span>
+    <h1>Astha <span>Ji</span>,<br>this is for you.</h1>
+    <div class="petal-divider">🌸 🌸 🌸</div>
+    <p>I made this sirf apke liye.<br>Click below when you're ready to step in 🫶</p>
+    <button class="btn btn-primary" onclick="goTo('lyrics')">Open 🌸</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 2 — LYRICS FLASHCARDS
+═══════════════════════════════════ -->
+<div class="page" id="page-lyrics">
+  <div class="page-header fade-up">
+    <span class="page-emoji">🎵</span>
+    <h2 class="section-title">Songs that remind me of <span>you</span></h2>
+    <p class="section-sub">Tap the arrow to go to the next one 🌸</p>
+  </div>
+
+  <div class="flashcard-section">
+    <div class="progress-dots" id="progressDots">
+      <div class="progress-dot done"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+
+    <div class="flashcard-wrapper" id="flashcardWrapper">
+
+      <!-- CARD 1 -->
+      <div class="flashcard active" id="card-1">
+        <img src="assets/photos/photo1.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-placeholder" style="display:none">🌸</div>
+        <div class="card-body">
+          <div class="card-song">🎵 Tere saang yaara</div>
+          <div class="card-lyrics">
+            <!-- ADD LYRICS FOR SONG 1 HERE -->
+            "Tera mera milna dastoor hai
+Tere hone se mujhmein noor hai
+Main hoon soona sa ek aasmaan, mehtaab tu"
+          </div>
+          <div class="card-playing">
+            <div class="music-bars">
+              <div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div>
+            </div>
+            Now playing
+          </div>
+        </div>
+        <audio id="audio1" src="assets/songs/audio1.mp3" loop></audio>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="flashcard" id="card-2">
+        <img src="assets/photos/photo2.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-placeholder" style="display:none">🌸</div>
+        <div class="card-body">
+          <div class="card-song">🎵 Hasi ban gaye</div>
+          <div class="card-lyrics">
+            <!-- ADD LYRICS FOR SONG 2 HERE -->
+            "Har safar har jagah, har kahin ban gaye
+Maante te khuda, aur haan wahi ban gaye"
+"
+          </div>
+          <div class="card-playing">
+            <div class="music-bars">
+              <div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div>
+            </div>
+            Now playing
+          </div>
+        </div>
+        <audio id="audio2" src="assets/songs/audio2.mp3" loop></audio>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="flashcard" id="card-3">
+        <img src="assets/photos/photo3.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-placeholder" style="display:none">🌸</div>
+        <div class="card-body">
+          <div class="card-song">🎵 Lae Dooba</div>
+          <div class="card-lyrics">
+            <!-- ADD LYRICS FOR SONG 3 HERE -->
+            "Ho dekhne mein tujhe
+            Saara din jaaye nikal"
+          </div>
+          <div class="card-playing">
+            <div class="music-bars">
+              <div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div>
+            </div>
+            Now playing
+          </div>
+        </div>
+        <audio id="audio3" src="assets/songs/audio3.mp3" loop></audio>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="flashcard" id="card-4">
+        <img src="assets/photos/photo4.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-placeholder" style="display:none">🌸</div>
+        <div class="card-body">
+          <div class="card-song">🎵 Khat</div>
+          <div class="card-lyrics">
+            <!-- ADD LYRICS FOR SONG 4 HERE -->
+            "Dekh, shayar bana tere liye
+Nagma likha tere liye
+Main khuda mein maanu kyun
+Tu khuda mere liye
+
+
+
+"
+          </div>
+          <div class="card-playing">
+            <div class="music-bars">
+              <div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div>
+            </div>
+            Now playing
+          </div>
+        </div>
+        <audio id="audio4" src="assets/songs/audio4.mp3" loop></audio>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="flashcard" id="card-5">
+        <img src="assets/photos/photo5.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-placeholder" style="display:none">🌸</div>
+        <div class="card-body">
+          <div class="card-song">🎵 Be my baby</div>
+          <div class="card-lyrics">
+            <!-- ADD LYRICS FOR SONG 5 HERE -->
+            "
+You know I will adore you
+'Til eternity
+So won't you, please
+Be my little baby? 
+          </div>
+          <div class="card-playing">
+            <div class="music-bars">
+              <div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div>
+            </div>
+            Now playing
+          </div>
+        </div>
+        <audio id="audio5" src="assets/songs/audio5.mp3" loop></audio>
+      </div>
+
+    </div><!-- flashcard-wrapper -->
+
+    <div class="flashcard-controls">
+      <button class="btn btn-ghost" onclick="prevCard()" id="prevBtn" style="padding:10px 24px">← Prev</button>
+      <span class="card-counter" id="cardCounter">1 / 5</span>
+      <button class="btn btn-primary" onclick="nextCard()" id="nextBtn" style="padding:10px 24px">Next →</button>
+    </div>
+
+    <div class="page-nav" id="lyricsNextPage" style="display:none">
+      <button class="btn btn-primary" onclick="goTo('confession')">Continue 🌸</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 3 — CONFESSION
+═══════════════════════════════════ -->
+<div class="page" id="page-confession">
+  <div class="confession-inner">
+    <span class="heart-big">💗</span>
+    <h2 class="section-title" style="margin-bottom:20px">There's something I<br><span>want you to know</span></h2>
+
+    <p class="confession-text">
+   18 October 2025, 9:42 a.m.<br>
+
+I got queued with someone named Max Verstappen.<br>
+
+Little did I know that person would end up having such a huge impact on my life.<br>
+
+To be honest, I wasn't really living much of a life back then. But somehow, she made me happier and gave me direction. Not because of something extraordinary she did for me, but simply because she existed.<br>
+
+At first, she was just another person.<br>
+
+Then she became someone I enjoyed talking to.<br>
+
+Then she became someone I started waiting for.<br>
+
+And somehow, without realizing it, she became someone I cared about far more than I ever planned to.<br>
+
+It wasn't one big moment.<br>
+
+It was hundreds of little things.<br>
+
+The way she talks.<br>
+
+The way she laughs.<br>
+
+The random things she gets excited about.<br>
+
+And her voice... genuinely unfair. Some people hear music in songs; I hear it when she talks.<br>
+
+Those little things slowly became my favorite things.<br>
+
+I won't say she comes to my mind every minute.<br>
+
+She came once, and never really left.<br>
+
+She's so much like me in some ways. She isolates herself when she's feeling low, just like I do. The difference is that even when I don't feel like talking to anyone, she's the one person I'd still want to talk to.<br>
+
+And by the way, our Spotify Blend being 99% is honestly disappointing.<br>
+
+It should've been 100.<br>
+
+Sometimes I feel like she's too precious to fit inside something as small as a photograph or a screen. I want the whole world to be filled with reminders of her.<br>
+
+This keyboard.<br>
+
+This laptop.<br>
+
+This pillow.<br>
+
+Everywhere I look, somehow there's a thought of her.<br>
+
+If she knew how many times I put aside my own feelings just to understand her perspective, maybe she'd finally realize how lovable she really is.<br>
+
+And I already know what she's probably thinking while reading this:<br>
+
+"I don't deserve this."<br>
+ispe toh mai yahi kahunga<br>
+
+"Tumhe toh iss duniya ki saari khushi ka haq hai.<br>
+Ek baar haq jata ke toh dekho."<br>
+
+Because if anyone deserves EVERYTHINGGG, it's you.<br>
+
+One day you said you were worried about gaining weight, and honestly I wanted to say:<br>
+
+"Jab talak tera sahara hai mujhe,<br>
+gehra paani bhi kinaara hai mujhe.<br>
+
+Na bhi chamke toh koi baat nahi,<br>
+tu toh waise hi sitara hai mujhe."<br>
+
+I don't know what happens after you read this.<br>
+
+And strangely, I don't really need to know right now.<br>
+
+I've reached a point where I love loving you more than i love you.<br>
+
+I just wanted you to know that I'm not going anywhere.<br>
+
+Even if you show me the parts of yourself you think are difficult to love.<br>
+
+Even if you show me the parts you try to hide.<br>
+
+I'd still choose you.<br>
+
+Again.<br>
+
+And again.<br>
+
+And again.<br>
+
+I want to love you exactly as you are, not as some perfect version of you.<br>
+
+And if my arms can't reach the hurt you hide, then I hope my prayers can hold you from the other side.<br>
+
+Lastly, I didn't make this expecting anything from you.<br>
+
+I made it because I wanted you to know how much you mean to me.<br>
+
+Take your time.<br>
+
+Heal.<br>
+
+Move forward.<br>
+
+Just don't stay trapped in the same chapter forever, because the world deserves to see the astha I see.<br>
+
+thank you.<br>
+
+Thank you for existing.<br>
+
+Thank you for being you.<br>
+
+Alright, bahut bol diya.<br>
+
+Hehehe.<br>
+
+Love you.<br>
+
+    </p>
+
+    <div class="petal-divider">🌸 🌸 🌸</div>
+
+    <p class="confession-sign">— Your Rituuuuu</p>
+
+    <button class="btn btn-primary" onclick="goTo('couples')">There's more 🌸</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 4 — COUPLES
+═══════════════════════════════════ -->
+<div class="page" id="page-couples">
+  <div class="page-header fade-up">
+    <span class="page-emoji">💞</span>
+    <h2 class="section-title">Couples you love —<br><span>&amp;why they remind me of us</span></h2>
+    <p class="section-sub">could be lowkey us btw if u want</p>
+  </div>
+
+  <div class="couples-grid">
+
+    <div class="couple-card">
+      <span class="couple-emoji">🌻</span>
+      <div class="couple-name">Nancy &amp; Jonathan</div>
+      <div class="couple-line">The quiet one who notices everything about you,<br>and the one who makes you feel truly seen.</div>
+      <span class="couple-tag">Stranger Things</span>
+    </div>
+
+    <div class="couple-card">
+      <span class="couple-emoji">🔥</span>
+      <div class="couple-name">Denji &amp; Reze</div>
+      <div class="couple-line">To be honest—<br>i have never been to school either.</div>
+      <span class="couple-tag">Chainsaw Man</span>
+    </div>
+
+    <div class="couple-card">
+      <span class="couple-emoji">🎬</span>
+      <div class="couple-name">Jamal &amp; Latika</div>
+      <div class="couple-line">Across every distance—<br>still choosing to love you everyday.</div>
+      <span class="couple-tag">Slumdog Millionaire</span>
+    </div>
+
+    <div class="couple-card">
+      <span class="couple-emoji">⚡</span>
+      <div class="couple-name">David &amp; Lucy</div>
+      <div class="couple-line">He'd take on the whole world for her.<br>Some people are worth everything, like you.</div>
+      <span class="couple-tag">Cyberpunk: Edgerunners</span>
+    </div>
+
+    <div class="couple-card" style="grid-column: span 1;">
+      <span class="couple-emoji">🌸</span>
+      <div class="couple-name">Iso &amp; Clove</div>
+      <div class="couple-line">You are Clove to my Iso —<br>simply meant to be in each other's orbit.</div>
+      <span class="couple-tag">Valorant</span>
+    </div>
+
+  </div>
+
+  <div class="page-nav">
+    <button class="btn btn-primary" onclick="goTo('edits')">One last thing 🌸</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 5 — EDITS
+═══════════════════════════════════ -->
+<div class="page" id="page-edits">
+  <div class="edits-inner">
+    <span class="page-emoji">✨</span>
+    <h2 class="section-title" style="margin-bottom:8px">Your <span>edit</span></h2>
+    <p class="section-sub" style="margin-bottom:28px">I didn't had many photos of you but i made with a lot of love. Click play when you're ready 🎬</p>
+
+    <div class="video-frame">
+      <div class="video-thumb" id="videoThumb" onclick="playVideo()">
+        <div class="play-btn">▶</div>
+      </div>
+      <video id="mainVideo" controls>
+        <source src="assets/video/video1.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="video-label">Your edit, Astha 💗</div>
+    <div class="video-sub">Because you deserve to see yourself the way I do 🌸</div>
+
+    <div style="margin-top:36px">
+      <button class="btn btn-ghost" onclick="goTo('landing')">← Back to the beginning</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ══════════════════════════
+//  PETALS
+// ══════════════════════════
+(function() {
+  const canvas = document.getElementById('petalCanvas');
+  const emojis = ['🌸','🌸','🌸','🌺','✿'];
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (12 + Math.random() * 14) + 'px';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.opacity = 0.4 + Math.random() * 0.5;
+    canvas.appendChild(p);
+  }
+})();
+
+// ══════════════════════════
+//  PAGE NAVIGATION
+// ══════════════════════════
+const pageOrder = ['landing','lyrics','confession','couples','edits'];
+let currentPage = 'landing';
+
+function goTo(id) {
+  // stop any playing audio
+  document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  currentPage = id;
+
+  // update nav dots
+  const dots = document.querySelectorAll('.nav-dot');
+  pageOrder.forEach((name, i) => {
+    dots[i].classList.toggle('active', name === id);
+  });
+
+  // trigger fade-up animations
+  setTimeout(() => {
+    document.querySelectorAll('#page-' + id + ' .fade-up').forEach(el => el.classList.add('visible'));
+  }, 80);
+
+  // if lyrics page, play first audio
+  if (id === 'lyrics') {
+    setTimeout(() => playAudio(currentCard), 300);
+  }
+
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════
+//  FLASHCARDS
+// ══════════════════════════
+let currentCard = 1;
+const totalCards = 5;
+
+function playAudio(cardNum) {
+  document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+  const audio = document.getElementById('audio' + cardNum);
+  if (audio) audio.play().catch(() => {});
+}
+
+function updateCard(newCard, direction) {
+  const oldEl = document.getElementById('card-' + currentCard);
+  const newEl = document.getElementById('card-' + newCard);
+
+  oldEl.classList.add('exit-left');
+  oldEl.classList.remove('active');
+
+  setTimeout(() => {
+    oldEl.classList.remove('exit-left');
+    newEl.style.transform = direction === 'next' ? 'translateX(60px) scale(0.95)' : 'translateX(-60px) scale(0.95)';
+    newEl.style.opacity = '0';
+    newEl.classList.add('active');
+    setTimeout(() => {
+      newEl.style.transform = '';
+      newEl.style.opacity = '';
+    }, 30);
+  }, 350);
+
+  currentCard = newCard;
+
+  // dots
+  document.querySelectorAll('.progress-dot').forEach((d, i) => {
+    d.classList.toggle('done', i < newCard);
+  });
+
+  // counter
+  document.getElementById('cardCounter').textContent = newCard + ' / ' + totalCards;
+
+  // play audio
+  setTimeout(() => playAudio(newCard), 400);
+
+  // show next-page button after last card
+  document.getElementById('lyricsNextPage').style.display = newCard === totalCards ? 'flex' : 'none';
+  document.getElementById('nextBtn').style.display = newCard === totalCards ? 'none' : '';
+  document.getElementById('prevBtn').style.display = newCard === 1 ? 'none' : '';
+}
+
+function nextCard() {
+  if (currentCard < totalCards) updateCard(currentCard + 1, 'next');
+}
+
+function prevCard() {
+  if (currentCard > 1) updateCard(currentCard - 1, 'prev');
+}
+
+// hide prev on load
+document.getElementById('prevBtn').style.display = 'none';
+
+// ══════════════════════════
+//  VIDEO
+// ══════════════════════════
+function playVideo() {
+  const thumb = document.getElementById('videoThumb');
+  const video = document.getElementById('mainVideo');
+  thumb.style.display = 'none';
+  video.style.display = 'block';
+  video.play().catch(() => {});
+}
+</script>
+</body>
+</html>
