@@ -4,1050 +4,827 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Astha 🌸</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --sakura-light: #fce4ec;
     --sakura-pink: #f48fb1;
     --sakura-deep: #e91e8c;
-    --sakura-blush: #fdf0f5;
     --petal-white: #fff5f8;
     --text-dark: #3d1f2e;
     --text-mid: #7b4060;
-    --gold: #f7c59f;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito',sans-serif; background:var(--petal-white); color:var(--text-dark); overflow-x:hidden; cursor:none; }
+
+  /* ── LOADING SCREEN ── */
+  #loader {
+    position:fixed; inset:0; z-index:999999;
+    background: linear-gradient(135deg,#fce4ec,#fdf0f5,#fff5f8);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #loader.hide { opacity:0; visibility:hidden; }
+  .loader-name {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(2.5rem,10vw,5rem);
+    color:var(--sakura-deep); font-style:italic;
+    letter-spacing:6px; margin-bottom:20px;
+    animation: loader-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes loader-pulse { 0%,100%{opacity:0.4;transform:scale(0.97)} 50%{opacity:1;transform:scale(1.03)} }
+  .loader-petals { font-size:28px; letter-spacing:12px; animation: loader-pulse 1.5s ease-in-out infinite 0.3s; }
+  .loader-bar-wrap { width:160px; height:3px; background:rgba(233,30,140,0.2); border-radius:10px; margin-top:24px; overflow:hidden; }
+  .loader-bar { height:100%; background:linear-gradient(90deg,var(--sakura-pink),var(--sakura-deep)); border-radius:10px; animation: loadbar 2s ease forwards; }
+  @keyframes loadbar { 0%{width:0%} 100%{width:100%} }
+
+  /* ── AURORA BACKGROUND ── */
+  .aurora {
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .aurora-blob {
+    position:absolute; border-radius:50%; filter:blur(80px); opacity:0.35;
+    animation: aurora-move 12s ease-in-out infinite;
+  }
+  .aurora-blob:nth-child(1) { width:60vw; height:60vw; background:#fce4ec; top:-10%; left:-10%; animation-delay:0s; }
+  .aurora-blob:nth-child(2) { width:50vw; height:50vw; background:#f8bbd0; top:30%; right:-10%; animation-delay:3s; }
+  .aurora-blob:nth-child(3) { width:55vw; height:55vw; background:#e1bee7; bottom:-10%; left:20%; animation-delay:6s; }
+  .aurora-blob:nth-child(4) { width:40vw; height:40vw; background:#ffd6e7; top:10%; right:20%; animation-delay:9s; }
+  @keyframes aurora-move {
+    0%,100% { transform:translate(0,0) scale(1); }
+    33%      { transform:translate(3vw,4vh) scale(1.08); }
+    66%      { transform:translate(-4vw,2vh) scale(0.95); }
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* ── STARS ── */
+  .star { position:fixed; pointer-events:none; z-index:0; border-radius:50%; background:#fff; animation:twinkle linear infinite; }
+  @keyframes twinkle { 0%,100%{opacity:0.1;transform:scale(0.8)} 50%{opacity:0.9;transform:scale(1.2)} }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--petal-white);
-    color: var(--text-dark);
-    overflow-x: hidden;
+  /* ── ASTHA NAME BACKGROUND ── */
+  .name-bg {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
   }
+  .name-bg-text {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(80px,18vw,200px);
+    color: rgba(233,30,140,0.04);
+    font-style:italic; font-weight:600;
+    letter-spacing:20px; user-select:none;
+    animation: name-rotate 30s linear infinite;
+    white-space:nowrap;
+  }
+  @keyframes name-rotate { 0%{transform:rotate(-5deg) scale(1)} 50%{transform:rotate(5deg) scale(1.05)} 100%{transform:rotate(-5deg) scale(1)} }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor { position:fixed; pointer-events:none; z-index:99999; font-size:20px; transform:translate(-50%,-50%); user-select:none; transition:transform 0.15s ease; }
+  .cursor.clicking { transform:translate(-50%,-50%) scale(1.4); }
+
+  /* ── CLICK BURST ── */
+  .burst-heart { position:fixed; pointer-events:none; z-index:99998; animation:burst 0.8s ease forwards; user-select:none; }
+  @keyframes burst {
+    0%   { opacity:1; transform:translate(var(--tx),var(--ty)) scale(0.5); }
+    60%  { opacity:1; transform:translate(calc(var(--tx) + var(--dx)),calc(var(--ty) - 60px)) scale(1.2); }
+    100% { opacity:0; transform:translate(calc(var(--tx) + var(--dx2)),calc(var(--ty) - 120px)) scale(0.8); }
+  }
+
+  /* ── PAGE SWEEP TRANSITION ── */
+  .sweep-overlay {
+    position:fixed; inset:0; z-index:9999; pointer-events:none;
+    background:linear-gradient(135deg,#fce4ec,#f48fb1);
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.5s cubic-bezier(0.77,0,0.175,1);
+  }
+  .sweep-overlay.sweeping { clip-path: circle(150% at 50% 50%); }
+  .sweep-overlay.sweep-out { clip-path: circle(0% at 50% 50%); transition: clip-path 0.5s cubic-bezier(0.77,0,0.175,1) 0.1s; }
 
   /* ── SAKURA PETALS ── */
-  .petal-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-
-  .petal {
-    position: absolute;
-    top: -40px;
-    font-size: 18px;
-    opacity: 0.7;
-    animation: fall linear infinite;
-    user-select: none;
-  }
-
+  .petal-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+  .petal { position:absolute; top:-40px; opacity:0.7; animation:fall linear infinite; user-select:none; }
   @keyframes fall {
-    0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0.8; }
-    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); }
-    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
+    0%   { transform:translateY(0) rotate(0deg) translateX(0); opacity:0.8; }
+    50%  { transform:translateY(50vh) rotate(180deg) translateX(30px); }
+    100% { transform:translateY(110vh) rotate(360deg) translateX(-20px); opacity:0; }
   }
 
   /* ── PAGES ── */
-  .page {
-    display: none;
-    min-height: 100vh;
-    position: relative;
-    z-index: 1;
+  .page { display:none; min-height:100vh; position:relative; z-index:1; }
+  .page.active { display:flex; flex-direction:column; }
+
+  /* ── LANDING ── */
+  #page-landing { align-items:center; justify-content:center; text-align:center; min-height:100vh; }
+  .landing-inner { max-width:480px; padding:40px 20px; position:relative; z-index:2; }
+  .sakura-icon { font-size:64px; animation:float 3s ease-in-out infinite; display:block; margin-bottom:16px; cursor:none; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .landing-inner h1 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,7vw,3.2rem); color:var(--text-dark); line-height:1.15; margin-bottom:12px; }
+  .landing-inner h1 .name-span { color:var(--sakura-deep); font-style:italic; }
+  .landing-inner p { font-size:1.05rem; color:var(--text-mid); margin-bottom:20px; line-height:1.7; }
+  #typewriter-name { color:var(--sakura-deep); font-style:italic; }
+  .cursor-blink { animation:blink 0.7s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* COUNTDOWN */
+  .countdown-box { display:flex; gap:12px; justify-content:center; margin-bottom:28px; flex-wrap:wrap; }
+  .cd-item { background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); border:1.5px solid var(--sakura-pink); border-radius:12px; padding:10px 14px; min-width:64px; text-align:center; }
+  .cd-num { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--sakura-deep); display:block; line-height:1; }
+  .cd-label { font-size:0.68rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; }
+  .cd-since { font-size:0.78rem; color:var(--text-mid); margin-bottom:16px; }
+
+  /* EASTER EGG */
+  .easter-popup {
+    position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(30px);
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(12px);
+    border:1.5px solid var(--sakura-pink); border-radius:20px;
+    padding:16px 28px; z-index:9998; text-align:center;
+    box-shadow:0 8px 32px rgba(233,30,140,0.2);
+    opacity:0; pointer-events:none;
+    transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
   }
-
-  .page.active { display: flex; flex-direction: column; }
-
-  /* ── LANDING PAGE ── */
-  #page-landing {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: radial-gradient(ellipse at 60% 30%, #fce4ec 0%, #fdf0f5 60%, #fff5f8 100%);
-    min-height: 100vh;
-  }
-
-  .landing-inner { max-width: 480px; padding: 40px 20px; }
-
-  .sakura-icon {
-    font-size: 64px;
-    animation: float 3s ease-in-out infinite;
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-12px); }
-  }
-
-  .landing-inner h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 7vw, 3.2rem);
-    color: var(--text-dark);
-    line-height: 1.15;
-    margin-bottom: 12px;
-  }
-
-  .landing-inner h1 span { color: var(--sakura-deep); font-style: italic; }
-
-  .landing-inner p {
-    font-size: 1.05rem;
-    color: var(--text-mid);
-    margin-bottom: 36px;
-    line-height: 1.7;
-  }
+  .easter-popup.show { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:all; }
+  .easter-popup p { font-family:'Caveat',cursive; font-size:1.2rem; color:var(--text-dark); }
 
   /* ── BUTTONS ── */
-  .btn {
-    display: inline-block;
-    padding: 14px 36px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Nunito', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--sakura-pink), var(--sakura-deep));
-    color: #fff;
-    box-shadow: 0 6px 24px rgba(233, 30, 140, 0.25);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 32px rgba(233, 30, 140, 0.35);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    border: 2px solid var(--sakura-pink);
-    color: var(--sakura-deep);
-  }
-
-  .btn-ghost:hover {
-    background: var(--sakura-light);
-    transform: translateY(-2px);
-  }
+  .btn { display:inline-block; padding:14px 36px; border-radius:50px; border:none; cursor:none; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:600; letter-spacing:0.5px; transition:all 0.3s ease; text-decoration:none; }
+  .btn-primary { background:linear-gradient(135deg,var(--sakura-pink),var(--sakura-deep)); color:#fff; box-shadow:0 6px 24px rgba(233,30,140,0.25); }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 10px 32px rgba(233,30,140,0.35); }
+  .btn-ghost { background:transparent; border:2px solid var(--sakura-pink); color:var(--sakura-deep); }
+  .btn-ghost:hover { background:var(--sakura-light); transform:translateY(-2px); }
 
   /* ── NAV DOTS ── */
-  .nav-dots {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .nav-dots { position:fixed; right:20px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:10px; }
+  .nav-dot { width:10px; height:10px; border-radius:50%; background:var(--sakura-pink); opacity:0.4; cursor:none; transition:all 0.3s; }
+  .nav-dot.active { opacity:1; transform:scale(1.4); }
+
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,5vw,2.6rem); color:var(--text-dark); text-align:center; margin-bottom:8px; }
+  .section-title span { color:var(--sakura-deep); font-style:italic; }
+  .section-sub { text-align:center; color:var(--text-mid); font-size:0.95rem; margin-bottom:40px; }
+  .page-header { padding:60px 20px 20px; text-align:center; }
+  .page-emoji { font-size:40px; display:block; margin-bottom:12px; }
+
+  /* ── FLASHCARDS ── */
+  #page-lyrics { align-items:center; justify-content:flex-start; }
+  .flashcard-section { width:100%; max-width:600px; margin:0 auto; padding:0 20px 60px; }
+  .flashcard-wrapper { position:relative; height:auto; margin-bottom:24px; }
+  .flashcard { display:none; border-radius:24px; overflow:hidden; box-shadow:0 12px 48px rgba(233,30,140,0.18); flex-direction:column; background:#fff; }
+  .flashcard.active { display:flex; }
+
+  /* SLOW ZOOM on photos */
+  .card-photo { width:100%; height:auto; display:block; animation:photo-zoom 8s ease-in-out infinite alternate; transform-origin:center center; }
+  @keyframes photo-zoom { 0%{transform:scale(1)} 100%{transform:scale(1.07)} }
+
+  .card-photo-placeholder { width:100%; height:260px; background:linear-gradient(135deg,var(--sakura-light),var(--sakura-pink)); display:flex; align-items:center; justify-content:center; font-size:48px; }
+  .card-body { padding:20px 24px; flex:1; display:flex; flex-direction:column; justify-content:center; }
+  .card-song { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--sakura-deep); margin-bottom:4px; }
+  .card-lyrics { font-size:0.9rem; color:var(--text-mid); line-height:1.7; font-style:italic; }
+  .audio-progress-wrap { margin-top:12px; background:var(--sakura-light); border-radius:10px; height:4px; overflow:hidden; }
+  .audio-progress-bar { height:100%; background:linear-gradient(90deg,var(--sakura-pink),var(--sakura-deep)); border-radius:10px; width:0%; transition:width 0.5s linear; }
+  .card-playing { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:0.8rem; color:var(--sakura-pink); }
+  .music-bars { display:flex; align-items:flex-end; gap:2px; height:14px; }
+  .bar { width:3px; background:var(--sakura-pink); border-radius:2px; animation:musicbar 0.8s ease infinite; }
+  .bar:nth-child(1){animation-delay:0s;height:6px} .bar:nth-child(2){animation-delay:0.15s;height:12px} .bar:nth-child(3){animation-delay:0.3s;height:8px} .bar:nth-child(4){animation-delay:0.45s;height:14px}
+  @keyframes musicbar { 0%,100%{transform:scaleY(0.5)} 50%{transform:scaleY(1.4)} }
+  .flashcard-controls { display:flex; justify-content:center; align-items:center; gap:20px; }
+  .card-counter { font-size:0.9rem; color:var(--text-mid); min-width:60px; text-align:center; }
+  .progress-dots { display:flex; justify-content:center; gap:8px; margin-bottom:20px; }
+  .progress-dot { width:8px; height:8px; border-radius:50%; background:var(--sakura-light); border:1.5px solid var(--sakura-pink); transition:background 0.3s; }
+  .progress-dot.done { background:var(--sakura-pink); }
+
+  /* ── CONFESSION ── */
+  #page-confession { align-items:center; justify-content:center; text-align:center; padding:40px 20px; }
+  .envelope-wrap { display:flex; flex-direction:column; align-items:center; width:100%; max-width:580px; }
+  .envelope-hint { font-size:0.9rem; color:var(--text-mid); margin-bottom:20px; animation:pulse-hint 2s ease-in-out infinite; }
+  @keyframes pulse-hint { 0%,100%{opacity:0.5} 50%{opacity:1} }
+  .envelope { width:min(300px,80vw); cursor:none; filter:drop-shadow(0 8px 24px rgba(233,30,140,0.28)); transition:transform 0.3s ease; perspective:800px; }
+  .envelope:hover { transform:scale(1.05) translateY(-5px); }
+  .env-body { width:100%; background:linear-gradient(160deg,#fff0f5,#fce4ec); border-radius:8px 8px 12px 12px; aspect-ratio:1.6/1; position:relative; border:1.5px solid var(--sakura-pink); overflow:visible; }
+  .env-left { position:absolute; top:0; left:-1px; width:52%; height:100%; background:linear-gradient(135deg,#ffd6e7,#fce4ec); clip-path:polygon(0% 0%,100% 50%,0% 100%); }
+  .env-right { position:absolute; top:0; right:-1px; width:52%; height:100%; background:linear-gradient(225deg,#ffd6e7,#fce4ec); clip-path:polygon(100% 0%,0% 50%,100% 100%); }
+  .env-bottom { position:absolute; bottom:-1px; left:-1px; right:-1px; height:55%; background:linear-gradient(175deg,#fce4ec,#f8bbd0); clip-path:polygon(0% 100%,50% 0%,100% 100%); }
+  .env-flap { position:absolute; top:-1px; left:-1px; right:-1px; height:55%; background:linear-gradient(160deg,#fce4ec,#f48fb1); clip-path:polygon(0% 0%,100% 0%,50% 100%); transform-origin:top center; transition:transform 0.8s cubic-bezier(0.34,1.1,0.64,1); border:1.5px solid var(--sakura-pink); z-index:2; }
+  .envelope.opened .env-flap { transform:rotateX(180deg); }
+  .env-seal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:48px; height:48px; background:radial-gradient(circle,#e91e8c,#ad1457); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 2px 12px rgba(233,30,140,0.5); z-index:3; transition:opacity 0.4s 0.3s,transform 0.4s 0.3s; }
+  .envelope.opened .env-seal { opacity:0; transform:translate(-50%,-50%) scale(0.3); }
+  .letter-wrap { width:100%; max-height:0; overflow:hidden; transition:max-height 1.5s cubic-bezier(0.4,0,0.2,1); }
+  .letter-wrap.open { max-height:99999px; }
+  .letter-paper { background:#fffaf8; border:1px solid #f8d7e3; border-radius:12px; padding:32px 28px; margin-top:20px; box-shadow:0 8px 32px rgba(233,30,140,0.1); text-align:left; position:relative; }
+  .letter-paper::before { content:''; position:absolute; top:0; left:28px; right:28px; height:2px; background:linear-gradient(90deg,transparent,var(--sakura-pink),transparent); border-radius:2px; }
+  .confession-text { font-family:'Caveat',cursive; font-size:clamp(1.05rem,2.8vw,1.25rem); color:var(--text-dark); line-height:2; margin-bottom:20px; }
+  .confession-text em { color:var(--sakura-deep); font-style:italic; }
+
+  /* LETTER HIGHLIGHT ON HOVER */
+  .confession-text br + br { display:none; }
+  .letter-line { display:inline; transition:background 0.3s, padding 0.3s; border-radius:4px; }
+  .confession-text p:hover .letter-line,
+  .confession-text:hover { background:rgba(233,30,140,0.06); border-radius:8px; padding:2px 4px; }
+
+  .confession-sign { font-family:'Caveat',cursive; font-size:1.2rem; color:var(--text-mid); margin-bottom:24px; text-align:right; }
+
+  /* ── TIMELINE ── */
+  #page-timeline { align-items:center; justify-content:flex-start; padding:60px 0 40px; }
+  .timeline-header { text-align:center; padding:0 20px 40px; width:100%; }
+  .timeline-scroll { width:100%; overflow-x:auto; padding:0 20px 40px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .timeline-scroll::-webkit-scrollbar { display:none; }
+  .timeline-track { display:flex; align-items:center; gap:0; min-width:max-content; padding:40px 40px; position:relative; }
+  .timeline-track::before { content:''; position:absolute; top:50%; left:40px; right:40px; height:2px; background:linear-gradient(90deg,var(--sakura-pink),var(--sakura-deep),var(--sakura-pink)); border-radius:2px; z-index:0; }
+  .timeline-item { display:flex; flex-direction:column; align-items:center; position:relative; z-index:1; margin:0 32px; }
+  .timeline-item:nth-child(odd) { flex-direction:column-reverse; }
+  .timeline-dot { width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg,var(--sakura-pink),var(--sakura-deep)); border:3px solid #fff; box-shadow:0 0 0 3px var(--sakura-pink),0 4px 12px rgba(233,30,140,0.3); flex-shrink:0; margin:12px 0; animation:dot-pulse 2s ease-in-out infinite; }
+  @keyframes dot-pulse { 0%,100%{box-shadow:0 0 0 3px var(--sakura-pink),0 4px 12px rgba(233,30,140,0.3)} 50%{box-shadow:0 0 0 6px rgba(244,143,177,0.3),0 4px 12px rgba(233,30,140,0.5)} }
+  .timeline-card { background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); border:1.5px solid rgba(244,143,177,0.4); border-radius:16px; padding:16px 20px; text-align:center; max-width:160px; box-shadow:0 4px 20px rgba(233,30,140,0.1); transition:transform 0.3s,box-shadow 0.3s; }
+  .timeline-card:hover { transform:translateY(-6px); box-shadow:0 10px 32px rgba(233,30,140,0.2); }
+  .timeline-date { font-size:0.72rem; color:var(--sakura-deep); font-weight:700; letter-spacing:0.5px; margin-bottom:4px; text-transform:uppercase; }
+  .timeline-emoji { font-size:28px; display:block; margin-bottom:6px; }
+  .timeline-label { font-family:'Caveat',cursive; font-size:1rem; color:var(--text-dark); line-height:1.4; }
+  .timeline-hint { text-align:center; font-size:0.82rem; color:var(--text-mid); padding-bottom:10px; animation:pulse-hint 2s infinite; }
+
+  /* POLAROIDS */
+  #page-polaroids { align-items:center; justify-content:flex-start; padding:60px 0 40px; }
+  .polaroids-header { text-align:center; padding:0 20px 40px; width:100%; }
+  .polaroids-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:0 24px 60px; max-width:800px; margin:0 auto; width:100%; }
+  .polaroid {
+    background:#fff;
+    padding:14px 14px 44px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.12);
+    border-radius:4px;
+    transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s;
+    max-width:200px; width:calc(50% - 14px);
   }
+  .polaroid:nth-child(1){transform:rotate(-3deg)} .polaroid:nth-child(1):hover{transform:rotate(0deg) scale(1.08)}
+  .polaroid:nth-child(2){transform:rotate(2deg)} .polaroid:nth-child(2):hover{transform:rotate(0deg) scale(1.08)}
+  .polaroid:nth-child(3){transform:rotate(-1.5deg)} .polaroid:nth-child(3):hover{transform:rotate(0deg) scale(1.08)}
+  .polaroid:nth-child(4){transform:rotate(3deg)} .polaroid:nth-child(4):hover{transform:rotate(0deg) scale(1.08)}
+  .polaroid:nth-child(5){transform:rotate(-2deg)} .polaroid:nth-child(5):hover{transform:rotate(0deg) scale(1.08)}
+  .polaroid:hover { box-shadow:0 20px 60px rgba(233,30,140,0.2); z-index:10; position:relative; }
+  .polaroid img { width:100%; aspect-ratio:1/1; object-fit:cover; object-position:center; display:block; }
+  .polaroid-label { font-family:'Caveat',cursive; font-size:1rem; color:var(--text-mid); text-align:center; padding-top:10px; }
 
-  .nav-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--sakura-pink);
-    opacity: 0.4;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
+  /* ── FINAL ── */
+  #page-final { align-items:center; justify-content:center; text-align:center; min-height:100vh; }
+  .final-inner { max-width:500px; padding:40px 24px; position:relative; z-index:2; }
+  .final-big { font-family:'Playfair Display',serif; font-size:clamp(2rem,8vw,3.5rem); color:var(--text-dark); line-height:1.3; margin-bottom:20px; }
+  .final-big span { color:var(--sakura-deep); font-style:italic; }
+  .final-sub { font-size:1rem; color:var(--text-mid); margin-bottom:32px; line-height:1.7; }
+  .confetti-piece { position:fixed; pointer-events:none; z-index:99997; animation:confetti-fall 3s ease forwards; }
+  @keyframes confetti-fall { 0%{opacity:1;transform:translateY(-10px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
 
-  .nav-dot.active { opacity: 1; transform: scale(1.4); }
+  /* ── MISC ── */
+  .petal-divider { text-align:center; font-size:20px; letter-spacing:8px; color:var(--sakura-pink); margin:20px 0; }
+  .page-nav { display:flex; justify-content:center; gap:16px; padding:20px; }
+  .fade-up { opacity:0; transform:translateY(30px); transition:all 0.7s ease; }
+  .fade-up.visible { opacity:1; transform:translateY(0); }
 
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    color: var(--text-dark);
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .section-title span { color: var(--sakura-deep); font-style: italic; }
-
-  .section-sub {
-    text-align: center;
-    color: var(--text-mid);
-    font-size: 0.95rem;
-    margin-bottom: 40px;
-  }
-
-  /* ── PAGE HEADER ── */
-  .page-header {
-    padding: 60px 20px 20px;
-    text-align: center;
-  }
-
-  .page-emoji { font-size: 40px; display: block; margin-bottom: 12px; }
-
-  /* ── FLASHCARD LYRICS PAGE ── */
-  #page-lyrics {
-    background: linear-gradient(160deg, #fce4ec 0%, #fff5f8 100%);
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .flashcard-section {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-  }
-
-  .flashcard-wrapper {
-    position: relative;
-    height: auto;
-    margin-bottom: 24px;
-  }
-
-  .flashcard {
-    display: none;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 12px 48px rgba(233,30,140,0.18);
-    flex-direction: column;
-    background: #fff;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .flashcard.active {
-    display: flex;
-  }
-
-  .card-photo {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .card-photo-placeholder {
-    width: 100%;
-    height: 260px;
-    background: linear-gradient(135deg, var(--sakura-light), var(--sakura-pink));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-  }
-
-  .card-body {
-    padding: 20px 24px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .card-song {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--sakura-deep);
-    margin-bottom: 4px;
-  }
-
-  .card-lyrics {
-    font-size: 0.9rem;
-    color: var(--text-mid);
-    line-height: 1.7;
-    font-style: italic;
-  }
-
-  .card-playing {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    font-size: 0.8rem;
-    color: var(--sakura-pink);
-  }
-
-  .music-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 14px;
-  }
-
-  .bar {
-    width: 3px;
-    background: var(--sakura-pink);
-    border-radius: 2px;
-    animation: musicbar 0.8s ease infinite;
-  }
-
-  .bar:nth-child(1) { animation-delay: 0s;    height: 6px; }
-  .bar:nth-child(2) { animation-delay: 0.15s; height: 12px; }
-  .bar:nth-child(3) { animation-delay: 0.3s;  height: 8px; }
-  .bar:nth-child(4) { animation-delay: 0.45s; height: 14px; }
-
-  @keyframes musicbar {
-    0%, 100% { transform: scaleY(0.5); }
-    50%       { transform: scaleY(1.4); }
-  }
-
-  .flashcard-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .card-counter {
-    font-size: 0.9rem;
-    color: var(--text-mid);
-    min-width: 60px;
-    text-align: center;
-  }
-
-  .progress-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .progress-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--sakura-light);
-    border: 1.5px solid var(--sakura-pink);
-    transition: background 0.3s;
-  }
-
-  .progress-dot.done { background: var(--sakura-pink); }
-
-  /* ── CONFESSION PAGE ── */
-  #page-confession {
-    background: linear-gradient(160deg, #fff5f8 0%, #fce4ec 100%);
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .confession-inner {
-    max-width: 560px;
-    padding: 60px 28px;
-  }
-
-  .heart-big {
-    font-size: 72px;
-    animation: heartbeat 1.2s ease-in-out infinite;
-    display: block;
-    margin-bottom: 24px;
-  }
-
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    14%       { transform: scale(1.18); }
-    28%       { transform: scale(1); }
-    42%       { transform: scale(1.1); }
-    56%       { transform: scale(1); }
-  }
-
-  .confession-text {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1rem, 3vw, 1.25rem);
-    color: var(--text-dark);
-    line-height: 1.9;
-    margin-bottom: 32px;
-  }
-
-  .confession-text em { color: var(--sakura-deep); font-style: italic; }
-
-  .confession-sign {
-    font-size: 0.95rem;
-    color: var(--text-mid);
-    margin-bottom: 36px;
-  }
-
-  /* ── COUPLES PAGE ── */
-  #page-couples {
-    background: linear-gradient(160deg, #fdf0f5 0%, #fce4ec 100%);
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .couples-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-    width: 100%;
-  }
-
-  .couple-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 28px 24px;
-    box-shadow: 0 6px 28px rgba(233,30,140,0.12);
-    text-align: center;
-    transition: transform 0.35s ease, box-shadow 0.35s;
-    animation: floatCard 4s ease-in-out infinite;
-  }
-
-  .couple-card:nth-child(2) { animation-delay: 0.5s; }
-  .couple-card:nth-child(3) { animation-delay: 1s; }
-  .couple-card:nth-child(4) { animation-delay: 1.5s; }
-  .couple-card:nth-child(5) { animation-delay: 2s; }
-
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-8px); }
-  }
-
-  .couple-card:hover {
-    transform: translateY(-12px) !important;
-    box-shadow: 0 16px 48px rgba(233,30,140,0.22);
-  }
-
-  .couple-emoji { font-size: 44px; margin-bottom: 12px; display: block; }
-
-  .couple-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--sakura-deep);
-    margin-bottom: 6px;
-  }
-
-  .couple-line {
-    font-size: 0.85rem;
-    color: var(--text-mid);
-    font-style: italic;
-    line-height: 1.6;
-  }
-
-  .couple-tag {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 4px 14px;
-    background: var(--sakura-light);
-    border-radius: 50px;
-    font-size: 0.78rem;
-    color: var(--sakura-deep);
-    font-weight: 600;
-  }
-
-  /* ── EDITS PAGE ── */
-  #page-edits {
-    background: linear-gradient(160deg, #fce4ec 0%, #fff5f8 100%);
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-
-  .edits-inner {
-    max-width: 540px;
-    width: 100%;
-    padding: 60px 24px;
-    text-align: center;
-  }
-
-  .video-frame {
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 16px 56px rgba(233,30,140,0.25);
-    margin-bottom: 28px;
-    position: relative;
-    background: #1a0a12;
-  }
-
-  .video-thumb {
-    width: 100%;
-    aspect-ratio: 16/9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #2d0a1e, #5c1a3a);
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .video-thumb:hover { filter: brightness(1.1); }
-
-  .play-btn {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(8px);
-    border: 2px solid rgba(255,255,255,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    transition: transform 0.3s;
-  }
-
-  .video-thumb:hover .play-btn { transform: scale(1.15); }
-
-  video {
-    width: 100%;
-    border-radius: 24px;
-    display: none;
-  }
-
-  .video-label {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-  }
-
-  .video-sub {
-    font-size: 0.88rem;
-    color: var(--text-mid);
-  }
-
-  /* ── PETAL DIVIDER ── */
-  .petal-divider {
-    text-align: center;
-    font-size: 20px;
-    letter-spacing: 8px;
-    color: var(--sakura-pink);
-    margin: 20px 0;
-  }
-
-  /* ── BACK / NAV BUTTON ── */
-  .page-nav {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    padding: 20px;
-  }
-
-  /* ── ENTRANCE ANIMATIONS ── */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.7s ease;
-  }
-
-  .fade-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 500px) {
-    .couples-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-    .couple-card { padding: 18px 12px; }
+  @media(max-width:500px) {
+    .polaroid { width:calc(50% - 14px); max-width:none; }
+    .countdown-box { gap:8px; }
+    .cd-item { min-width:54px; padding:8px 10px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Falling petals -->
-<div class="petal-canvas" id="petalCanvas"></div>
+<div id="loader">
+  <div class="loader-name">Astha</div>
+  <div class="loader-petals">🌸 🌸 🌸</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
 
-<!-- Nav dots -->
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+
+<div class="name-bg"><div class="name-bg-text">Astha</div></div>
+
+<div class="petal-canvas" id="petalCanvas"></div>
+<div class="cursor" id="cursor">🌸</div>
+<div class="sweep-overlay" id="sweepOverlay"></div>
+
+<audio id="bgm" loop>
+  <source src="assets/songs/bgm.mp3" type="audio/mpeg">
+</audio>
+
 <div class="nav-dots" id="navDots">
   <div class="nav-dot active" onclick="goTo('landing')" title="Home"></div>
   <div class="nav-dot" onclick="goTo('lyrics')" title="Songs"></div>
-  <div class="nav-dot" onclick="goTo('confession')" title="Feelings"></div>
-  <div class="nav-dot" onclick="goTo('couples')" title="Us"></div>
-  <div class="nav-dot" onclick="goTo('edits')" title="Edits"></div>
+  <div class="nav-dot" onclick="goTo('confession')" title="Letter"></div>
+  <div class="nav-dot" onclick="goTo('timeline')" title="Our Story"></div>
+  <div class="nav-dot" onclick="goTo('polaroids')" title="Memories"></div>
+  <div class="nav-dot" onclick="goTo('final')" title="Surprise"></div>
 </div>
 
-<!-- ═══════════════════════════════════
-     PAGE 1 — LANDING
-═══════════════════════════════════ -->
 <div class="page active" id="page-landing">
   <div class="landing-inner fade-up visible">
-    <span class="sakura-icon">🌸</span>
-    <h1>Astha<span>Ji</span>,<br>this is for you.</h1>
+    <span class="sakura-icon" id="easterIcon" onclick="easterClick()">🌸</span>
+    <h1><span id="typewriter-name"></span><span class="cursor-blink" id="tw-cursor">|</span><br><span class="name-span">this is for you.</span></h1>
     <div class="petal-divider">🌸 🌸 🌸</div>
-    <p>I made this sirf apke liye.<br>Click below when you're ready to step in 🫶</p>
+    <p class="cd-since">We've known each other for</p>
+    <div class="countdown-box">
+      <div class="cd-item"><span class="cd-num" id="cd-days">0</span><span class="cd-label">Days</span></div>
+      <div class="cd-item"><span class="cd-num" id="cd-hours">0</span><span class="cd-label">Hours</span></div>
+      <div class="cd-item"><span class="cd-num" id="cd-mins">0</span><span class="cd-label">Mins</span></div>
+      <div class="cd-item"><span class="cd-num" id="cd-secs">0</span><span class="cd-label">Secs</span></div>
+    </div>
+    <p>I made this sirf apke liye.<br>Click below when you're ready to step in 🫶</p><br>
     <button class="btn btn-primary" onclick="goTo('lyrics')">Open 🌸</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     PAGE 2 — LYRICS FLASHCARDS
-═══════════════════════════════════ -->
 <div class="page" id="page-lyrics">
   <div class="page-header fade-up">
     <span class="page-emoji">🎵</span>
     <h2 class="section-title">Songs that remind me of <span>you</span></h2>
     <p class="section-sub">Tap the arrow to go to the next one 🌸</p>
   </div>
-
   <div class="flashcard-section">
     <div class="progress-dots" id="progressDots">
-      <div class="progress-dot done"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
+      <div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div>
     </div>
+    <div class="flashcard-wrapper">
 
-    <div class="flashcard-wrapper" id="flashcardWrapper">
-
-      <!-- CARD 1 -->
       <div class="flashcard active" id="card-1">
-        <img src="assets/photos/photo1.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="assets/photos/photo1.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="card-photo-placeholder" style="display:none">🌸</div>
         <div class="card-body">
-          <div class="card-song">🎵 Tere Saang Yaara</div>
-          <div class="card-lyrics">
-            <!-- ADD LYRICS FOR SONG 1 HERE -->
-            "Tera mera milna dastoor hai
-Tere hone se mujhmein noor hai
-Main hoon soona sa ek aasmaan, mehtaab tu"
-          </div>
-          <div class="card-playing">
-            <div class="music-bars">
-              <div class="bar"></div><div class="bar"></div>
-              <div class="bar"></div><div class="bar"></div>
-            </div>
-            Now playing
-          </div>
+          <div class="card-song">🎵 Tere saang yaara</div>
+          <div class="card-lyrics">"Tera mera milna dastoor hai<br>Tere hone se mujhmein noor hai<br>Main hoon soona sa ek aasmaan, mehtaab tu"</div>
+          <div class="audio-progress-wrap"><div class="audio-progress-bar" id="prog1"></div></div>
+          <div class="card-playing"><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>Now playing</div>
         </div>
         <audio id="audio1" src="assets/songs/audio1.mp3" loop></audio>
       </div>
 
-      <!-- CARD 2 -->
       <div class="flashcard" id="card-2">
-        <img src="assets/photos/photo2.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="assets/photos/photo2.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="card-photo-placeholder" style="display:none">🌸</div>
         <div class="card-body">
-          <div class="card-song">🎵 Hasi Ban Gaye</div>
-          <div class="card-lyrics">
-            <!-- ADD LYRICS FOR SONG 2 HERE -->
-            "Har safar har jagah, har kahin ban gaye
-Maante te khuda, aur haan wahi ban gaye..."
-          </div>
-          <div class="card-playing">
-            <div class="music-bars">
-              <div class="bar"></div><div class="bar"></div>
-              <div class="bar"></div><div class="bar"></div>
-            </div>
-            Now playing
-          </div>
+          <div class="card-song">🎵 Hasi ban gaye</div>
+          <div class="card-lyrics">"Har safar har jagah, har kahin ban gaye<br>Maante te khuda, aur haan wahi ban gaye"</div>
+          <div class="audio-progress-wrap"><div class="audio-progress-bar" id="prog2"></div></div>
+          <div class="card-playing"><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>Now playing</div>
         </div>
         <audio id="audio2" src="assets/songs/audio2.mp3" loop></audio>
       </div>
 
-      <!-- CARD 3 -->
       <div class="flashcard" id="card-3">
-        <img src="assets/photos/photo3.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="assets/photos/photo3.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="card-photo-placeholder" style="display:none">🌸</div>
         <div class="card-body">
           <div class="card-song">🎵 Lae Dooba</div>
-          <div class="card-lyrics">
-            <!-- ADD LYRICS FOR SONG 3 HERE -->
-            "Ho dekhne mein tujhe
-            Saara din jaaye nikal"
-          </div>
-          <div class="card-playing">
-            <div class="music-bars">
-              <div class="bar"></div><div class="bar"></div>
-              <div class="bar"></div><div class="bar"></div>
-            </div>
-            Now playing
-          </div>
+          <div class="card-lyrics">"Ho dekhne mein tujhe<br>Saara din jaaye nikal"</div>
+          <div class="audio-progress-wrap"><div class="audio-progress-bar" id="prog3"></div></div>
+          <div class="card-playing"><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>Now playing</div>
         </div>
         <audio id="audio3" src="assets/songs/audio3.mp3" loop></audio>
       </div>
 
-      <!-- CARD 4 -->
       <div class="flashcard" id="card-4">
-        <img src="assets/photos/photo4.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="assets/photos/photo4.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="card-photo-placeholder" style="display:none">🌸</div>
         <div class="card-body">
           <div class="card-song">🎵 Khat</div>
-          <div class="card-lyrics">
-            <!-- ADD LYRICS FOR SONG 4 HERE -->
-            "Dekh, shayar bana tere liye
-Nagma likha tere liye
-Main khuda mein maanu kyun
-Tu khuda mere liye
-"
-          </div>
-          <div class="card-playing">
-            <div class="music-bars">
-              <div class="bar"></div><div class="bar"></div>
-              <div class="bar"></div><div class="bar"></div>
-            </div>
-            Now playing
-          </div>
+          <div class="card-lyrics">"Dekh, shayar bana tere liye<br>Nagma likha tere liye<br>Main khuda mein maanu kyun<br>Tu khuda mere liye"</div>
+          <div class="audio-progress-wrap"><div class="audio-progress-bar" id="prog4"></div></div>
+          <div class="card-playing"><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>Now playing</div>
         </div>
         <audio id="audio4" src="assets/songs/audio4.mp3" loop></audio>
       </div>
 
-      <!-- CARD 5 -->
       <div class="flashcard" id="card-5">
-        <img src="assets/photos/photo5.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="assets/photos/photo5.jpeg" alt="Astha" class="card-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="card-photo-placeholder" style="display:none">🌸</div>
         <div class="card-body">
-          <div class="card-song">🎵 Be My Baby</div>
-          <div class="card-lyrics">
-            <!-- ADD LYRICS FOR SONG 5 HERE -->
-            "You know I will adore you
-'Til eternity
-So won't you, please
-Be my little baby? "
-          </div>
-          <div class="card-playing">
-            <div class="music-bars">
-              <div class="bar"></div><div class="bar"></div>
-              <div class="bar"></div><div class="bar"></div>
-            </div>
-            Now playing
-          </div>
+          <div class="card-song">🎵 Haareya</div>
+          <div class="card-lyrics">"O hareya main dil hareya<br>Main haara tujhpe<br>Main haara tujhpe o…"</div>
+          <div class="audio-progress-wrap"><div class="audio-progress-bar" id="prog5"></div></div>
+          <div class="card-playing"><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>Now playing</div>
         </div>
         <audio id="audio5" src="assets/songs/audio5.mp3" loop></audio>
       </div>
 
-    </div><!-- flashcard-wrapper -->
-
+    </div>
     <div class="flashcard-controls">
       <button class="btn btn-ghost" onclick="prevCard()" id="prevBtn" style="padding:10px 24px">← Prev</button>
       <span class="card-counter" id="cardCounter">1 / 5</span>
       <button class="btn btn-primary" onclick="nextCard()" id="nextBtn" style="padding:10px 24px">Next →</button>
     </div>
-
     <div class="page-nav" id="lyricsNextPage" style="display:none">
       <button class="btn btn-primary" onclick="goTo('confession')">Continue 🌸</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     PAGE 3 — CONFESSION
-═══════════════════════════════════ -->
 <div class="page" id="page-confession">
-  <div class="confession-inner">
-    <span class="heart-big">💗</span>
-    <h2 class="section-title" style="margin-bottom:20px">There's something I<br><span>want you to know</span></h2>
-
-    <p class="confession-text">
+  <div class="envelope-wrap" style="padding:40px 20px;">
+    <h2 class="section-title" style="margin-bottom:8px">There's something I <span>want you to know</span></h2>
+    <p class="envelope-hint">💌 Tap the envelope to open</p>
+    <div class="envelope" id="theEnvelope" onclick="openEnvelope()">
+      <div class="env-body">
+        <div class="env-left"></div><div class="env-right"></div>
+        <div class="env-bottom"></div><div class="env-flap"></div>
+        <div class="env-seal">💗</div>
+      </div>
+    </div>
+    <div class="letter-wrap" id="letterWrap">
+      <div class="letter-paper">
+        <p class="confession-text">
 18 October 2025, 9:42 a.m.<br>
-
 I got queued with someone named Max Verstappen.<br>
-
 Little did I know that person would end up having such a huge impact on my life.<br>
-
 To be honest, I wasn't really living much of a life back then. But somehow, she made me happier and gave me direction. Not because of something extraordinary she did for me, but simply because she existed.<br>
-
 At first, she was just another person.<br>
-
 Then she became someone I enjoyed talking to.<br>
-
 Then she became someone I started waiting for.<br>
-
 And somehow, without realizing it, she became someone I cared about far more than I ever planned to.<br>
-
 It wasn't one big moment.<br>
-
 It was hundreds of little things.<br>
-
 The way she talks.<br>
-
 The way she laughs.<br>
-
 The random things she gets excited about.<br>
-
 And her voice... genuinely unfair. Some people hear music in songs; I hear it when she talks.<br>
-
 Those little things slowly became my favorite things.<br>
-
 I won't say she comes to my mind every minute.<br>
-
 She came once, and never really left.<br>
-
 She's so much like me in some ways. She isolates herself when she's feeling low, just like I do. The difference is that even when I don't feel like talking to anyone, she's the one person I'd still want to talk to.<br>
-
-And by the way, our Spotify Blend being 99% is honestly disappointing.<br>
-
-It should've been 100.<br>
-
+And by the way, our Spotify Blend being 99% is honestly disappointing. It should've been 100.<br>
 Sometimes I feel like she's too precious to fit inside something as small as a photograph or a screen. I want the whole world to be filled with reminders of her.<br>
-
 This keyboard.<br>
-
 This laptop.<br>
-
 This pillow.<br>
-
 Everywhere I look, somehow there's a thought of her.<br>
-
-If she knew how many times I put aside my own feelings just to understand her perspective, maybe she'd finally realize how lovable she really is.<br>
-
+If she knew how many times I put aside my own feelings just to understand her perspective, maybe she'd finally realize how lovable she really is.<br><br>
 And I already know what she's probably thinking while reading this:<br>
-
 "I don't deserve this."<br>
 ispe toh mai yahi kahunga<br>
-
 "Tumhe toh iss duniya ki saari khushi ka haq hai.<br>
 Ek baar haq jata ke toh dekho."<br>
-
 Because if anyone deserves EVERYTHINGGG, it's you.<br>
-
-One day you said you were worried about gaining weight, and honestly I wanted to say:<br>
-
-"Jab talak tera sahara hai mujhe,<br>
-gehra paani bhi kinaara hai mujhe.<br>
-
-Na bhi chamke toh koi baat nahi,<br>
-tu toh waise hi sitara hai mujhe."<br>
-
-I don't know what happens after you read this.<br>
-
-And strangely, I don't really need to know right now.<br>
-
-I've reached a point where I love loving you more than i love you.<br>
-
-I just wanted you to know that I'm not going anywhere.<br>
-
-Even if you show me the parts of yourself you think are difficult to love.<br>
-
-Even if you show me the parts you try to hide.<br>
-
-I'd still choose you.<br>
-
-Again.<br>
-
-And again.<br>
-
-And again.<br>
-
 I want to love you exactly as you are, not as some perfect version of you.<br>
-
+I won't let you go throgh that fear, if you want to run away from everyone i'll run away with you, if you want to live in hiding forever i'll hide with you forever.<br>
 And if my arms can't reach the hurt you hide, then I hope my prayers can hold you from the other side.<br>
-
 Lastly, I didn't make this expecting anything from you.<br>
-
-I made it because I wanted you to know how much you mean to me.<br>
-
-Take your time.<br>
-
+I made it so whenever you feel low and isolate yourself, i hope you will come to this and it may help you to feel a little good.<br>
+I hope one day when you feel like running away, you run towards me.<br>
 Heal.<br>
-
 Move forward.<br>
-
 Just don't stay trapped in the same chapter forever, because the world deserves to see the astha I see.<br>
-
 thank you.<br>
-
-Thank you for existing.<br>
-
-Thank you for being you.<br>
-
-Alright, bahut bol diya.<br>
-
+Alright, bahut bol diya.<br><br>
 Hehehe.<br>
-
-Love you.<br>
-
-    </p>
-
-    <div class="petal-divider">🌸 🌸 🌸</div>
-
-    <p class="confession-sign">— Your Rituuuuuuuu</p>
-
-    <button class="btn btn-primary" onclick="goTo('couples')">There's more 🌸</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════
-     PAGE 4 — COUPLES
-═══════════════════════════════════ -->
-<div class="page" id="page-couples">
-  <div class="page-header fade-up">
-    <span class="page-emoji">💞</span>
-    <h2 class="section-title">Couples you love —<br><span>&amp; why they remind me of us</span></h2>
-    <p class="section-sub">could be lowkey us btw if u want</p>
-  </div>
-
-  <div class="couples-grid">
-
-    <div class="couple-card">
-      <span class="couple-emoji">🌻</span>
-      <div class="couple-name">Nancy &amp; Jonathan</div>
-      <div class="couple-line">The quiet one who notices everything about you,<br>and the one who makes you feel truly seen.</div>
-      <span class="couple-tag">Stranger Things</span>
-    </div>
-
-    <div class="couple-card">
-      <span class="couple-emoji">🔥</span>
-      <div class="couple-name">Denji &amp; Reze</div>
-      <div class="couple-line">To be honest—<br>I have never been to school either.</div>
-      <span class="couple-tag">Chainsaw Man</span>
-    </div>
-
-    <div class="couple-card">
-      <span class="couple-emoji">🎬</span>
-      <div class="couple-name">Jamal &amp; Latika</div>
-      <div class="couple-line">Across every distance —<br>still choosing to love you everyday.</div>
-      <span class="couple-tag">Slumdog Millionaire</span>
-    </div>
-
-    <div class="couple-card">
-      <span class="couple-emoji">⚡</span>
-      <div class="couple-name">David &amp; Lucy</div>
-      <div class="couple-line">He'd take on the whole world for her.<br>Some people are worth everything, like you.</div>
-      <span class="couple-tag">Cyberpunk: Edgerunners</span>
-    </div>
-
-    <div class="couple-card" style="grid-column: span 1;">
-      <span class="couple-emoji">🌸</span>
-      <div class="couple-name">Iso &amp; Clove</div>
-      <div class="couple-line">You are Clove to my Iso —<br>simply meant to be in each other's orbit.</div>
-      <span class="couple-tag">Valorant</span>
-    </div>
-
-  </div>
-
-  <div class="page-nav">
-    <button class="btn btn-primary" onclick="goTo('edits')">One last thing 🌸</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════
-     PAGE 5 — EDITS
-═══════════════════════════════════ -->
-<div class="page" id="page-edits">
-  <div class="edits-inner">
-    <span class="page-emoji">✨</span>
-    <h2 class="section-title" style="margin-bottom:8px">Your <span>edit</span></h2>
-    <p class="section-sub" style="margin-bottom:28px">I didn't had many photos of you but i made with a lot of love. Click play when you're ready 🎬</p>
-
-    <div class="video-frame">
-      <div class="video-thumb" id="videoThumb" onclick="playVideo()">
-        <div class="play-btn">▶</div>
+        </p>
+        <div class="petal-divider">🌸 🌸 🌸</div>
+        <p class="confession-sign">— Rituuuuu</p>
+        <div style="display:flex;justify-content:center;margin-top:16px">
+          <button class="btn btn-primary" onclick="goTo('timeline')">There's more 🌸</button>
+        </div>
       </div>
-      <video id="mainVideo" controls>
-        <source src="assets/video/video1.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-label">Your edit, Astha 💗</div>
-    <div class="video-sub">Because you deserve to see yourself the way I do 🌸</div>
-
-    <div style="margin-top:36px">
-      <button class="btn btn-ghost" onclick="goTo('landing')">← Back to the beginning</button>
     </div>
   </div>
 </div>
 
+<div class="page" id="page-timeline">
+  <div class="timeline-header fade-up">
+    <span class="page-emoji">📖</span>
+    <h2 class="section-title">Our <span>little story</span></h2>
+    <p class="section-sub">Scroll sideways to see it all 🌸</p>
+  </div>
+  <p class="timeline-hint">← swipe →</p>
+  <div class="timeline-scroll">
+    <div class="timeline-track">
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-date">18 Oct 2025</div>
+          <span class="timeline-emoji">🎮</span>
+          <div class="timeline-label">Max Verstappen appeared in my comp and after seeing her gameplay i almost puked</div>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">First days</div>
+          <span class="timeline-emoji">💬</span>
+          <div class="timeline-label">Just another person... or so I thought</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">Discord</div>
+          <span class="timeline-emoji"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+<path fill="#8c9eff" d="M40,12c0,0-4.585-3.588-10-4l-0.488,0.976C34.408,10.174,36.654,11.891,39,14c-4.045-2.065-8.039-4-15-4s-10.955,1.935-15,4c2.346-2.109,5.018-4.015,9.488-5.024L18,8c-5.681,0.537-10,4-10,4s-5.121,7.425-6,22c5.162,5.953,13,6,13,6l1.639-2.185C13.857,36.848,10.715,35.121,8,32c3.238,2.45,8.125,5,16,5s12.762-2.55,16-5c-2.715,3.121-5.857,4.848-8.639,5.815L33,40c0,0,7.838-0.047,13-6C45.121,19.425,40,12,40,12z M17.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C21,28.209,19.433,30,17.5,30z M30.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C34,28.209,32.433,30,30.5,30z"></path>
+</svg></span>
+          <div class="timeline-label">I became a freaking streamer just to get ur attention</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-date">Then...</div>
+          <span class="timeline-emoji">⏳</span>
+          <div class="timeline-label">Someone I started waiting to talk to</div>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-date">Every day</div>
+          <span class="timeline-emoji">💭</span>
+          <div class="timeline-label">She came once into my mind, never left</div>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">Right now</div>
+          <span class="timeline-emoji">🌸</span>
+          <div class="timeline-label">This website. This moment. You reading this.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-date">Always</div>
+          <span class="timeline-emoji">💗</span>
+          <div class="timeline-label">I'd still choose you. Again and again.</div>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="btn btn-primary" onclick="goTo('polaroids')">YOU 🌸</button>
+  </div>
+</div>
+
+<div class="page" id="page-polaroids">
+  <div class="polaroids-header fade-up">
+    <span class="page-emoji">📸</span>
+    <h2 class="section-title">You, in <span>polaroids</span></h2>
+    <p class="section-sub">i didn't have many pics of you but yeah i thought this will look good. Hover to straighten them 🌸</p>
+  </div>
+  <div class="polaroids-grid">
+    <div class="polaroid">
+      <img src="assets/photos/photo1.jpeg" alt="Astha" onerror="this.style.background='linear-gradient(135deg,#fce4ec,#f48fb1)';this.style.height='160px'">
+      <div class="polaroid-label">these eyes will be the reason of my death😭</div>
+    </div>
+    <div class="polaroid">
+      <img src="assets/photos/photo2.jpeg" alt="Astha" onerror="this.style.background='linear-gradient(135deg,#fce4ec,#f48fb1)';this.style.height='160px'">
+      <div class="polaroid-label">gorgeoussss ✨</div>
+    </div>
+    <div class="polaroid">
+      <img src="assets/photos/photo3.jpeg" alt="Astha" onerror="this.style.background='linear-gradient(135deg,#fce4ec,#f48fb1)';this.style.height='160px'">
+      <div class="polaroid-label">devi ji🙏</div>
+    </div>
+    <div class="polaroid">
+      <img src="assets/photos/photo4.jpeg" alt="Astha" onerror="this.style.background='linear-gradient(135deg,#fce4ec,#f48fb1)';this.style.height='160px'">
+      <div class="polaroid-label">my fav 🌸</div>
+    </div>
+    <div class="polaroid">
+      <img src="assets/photos/photo5.jpeg" alt="Astha" onerror="this.style.background='linear-gradient(135deg,#fce4ec,#f48fb1)';this.style.height='160px'">
+      <div class="polaroid-label">you one day✨</div>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="btn btn-primary" onclick="goTo('final')">Last one 🌸</button>
+  </div>
+</div>
+
+<div class="page" id="page-final">
+  <div class="final-inner">
+    <span class="sakura-icon">🌸</span>
+    <div class="final-big">Thank you for<br><span>existing</span>,<br>Astha.</div>
+    <p class="final-sub">
+      This took me forever dude wdym im making this for 19 hours straight but u were on my mind all the time so i didn't even feel it(and i got to see you again and again).<br>
+      I learned many things too with this one so its a win-win gng.<br><br>
+      I hope you liked it.<br>
+      Good noit ahhhhhhhhhhhhhhhhhhhhhh
+    </p>
+    <div class="petal-divider">🌸 🌸 🌸</div>
+    <p style="color:var(--text-mid);font-size:0.9rem;margin-bottom:24px">— Rituuuuu🫶</p>
+    <button class="btn btn-ghost" onclick="goTo('landing')">← Back to the beginning</button>
+  </div>
+</div>
 
 <script>
-// ══════════════════════════
-//  PETALS
-// ══════════════════════════
-(function() {
-  const canvas = document.getElementById('petalCanvas');
-  const emojis = ['🌸','🌸','🌸','🌺','✿'];
-  for (let i = 0; i < 22; i++) {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.fontSize = (12 + Math.random() * 14) + 'px';
-    p.style.animationDuration = (6 + Math.random() * 10) + 's';
-    p.style.animationDelay = (Math.random() * 12) + 's';
-    p.style.opacity = 0.4 + Math.random() * 0.5;
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 2200);
+});
+
+// ── STARS ──
+(function(){
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const size=(1+Math.random()*2.5)+'px';
+    s.style.cssText=`width:${size};height:${size};left:${Math.random()*100}vw;top:${Math.random()*100}vh;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s`;
+    document.body.appendChild(s);
+  }
+})();
+
+// ── PETALS ──
+(function(){
+  const canvas=document.getElementById('petalCanvas');
+  const emojis=['🌸','🌸','🌸','🌺','✿'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');
+    p.className='petal';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'vw';
+    p.style.fontSize=(12+Math.random()*14)+'px';
+    p.style.animationDuration=(6+Math.random()*10)+'s';
+    p.style.animationDelay=(Math.random()*12)+'s';
+    p.style.opacity=0.4+Math.random()*0.5;
     canvas.appendChild(p);
   }
 })();
 
-// ══════════════════════════
-//  PAGE NAVIGATION
-// ══════════════════════════
-const pageOrder = ['landing','lyrics','confession','couples','edits'];
+// ── CURSOR ──
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px';
+  cursor.style.top=e.clientY+'px';
+});
+document.addEventListener('mousedown',()=>cursor.classList.add('clicking'));
+document.addEventListener('mouseup',()=>cursor.classList.remove('clicking'));
+
+// ── CLICK BURST ──
+const burstEmojis=['💗','🌸','✨','💕','🌺','💖'];
+document.addEventListener('click',e=>{
+  for(let i=0;i<6;i++){
+    const el=document.createElement('div');
+    el.className='burst-heart';
+    el.textContent=burstEmojis[Math.floor(Math.random()*burstEmojis.length)];
+    const angle=(Math.random()-0.5)*80;
+    el.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;font-size:${12+Math.random()*10}px;--tx:-50%;--ty:-50%;--dx:${(Math.random()-0.5)*60}px;--dx2:${(Math.random()-0.5)*80}px;animation-delay:${Math.random()*0.15}s`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),900);
+  }
+});
+
+// ── TYPEWRITER ──
+(function(){
+  const name='Astha';
+  const el=document.getElementById('typewriter-name');
+  const cur=document.getElementById('tw-cursor');
+  let i=0;
+  function type(){ if(i<=name.length){ el.textContent=name.slice(0,i); i++; setTimeout(type,160); } else cur.style.display='none'; }
+  setTimeout(type,2400);
+})();
+
+// ── COUNTDOWN ──
+function updateCountdown(){
+  const start=new Date('2025-10-18T09:42:00');
+  const diff=Math.floor((new Date()-start)/1000);
+  if(diff<0)return;
+  document.getElementById('cd-days').textContent=Math.floor(diff/86400);
+  document.getElementById('cd-hours').textContent=Math.floor((diff%86400)/3600);
+  document.getElementById('cd-mins').textContent=String(Math.floor((diff%3600)/60)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent=String(diff%60).padStart(2,'0');
+}
+updateCountdown(); setInterval(updateCountdown,1000);
+
+// ── EASTER EGG ──
+let easterCount=0, easterTimer=null;
+function easterClick(){
+  easterCount++;
+  clearTimeout(easterTimer);
+  easterTimer=setTimeout(()=>easterCount=0,2000);
+  if(easterCount>=3){
+    easterCount=0;
+    const popup=document.getElementById('easterPopup');
+    popup.classList.add('show');
+    setTimeout(()=>popup.classList.remove('show'),3500);
+  }
+}
+
+// ── FIXED NAVIGATION & BGM LOGIC ON CONTINUE BUTTON ──
+const bgm = document.getElementById("bgm");
+const sweep = document.getElementById('sweepOverlay');
+const pageOrder = ['landing','lyrics','confession','timeline','polaroids','final'];
 let currentPage = 'landing';
 
+function startBGM() {
+  if (!bgm) return;
+  bgm.volume = 0.3;
+  bgm.play().catch(err => console.log("BGM Play Error:", err));
+}
+
 function goTo(id) {
-  // stop any playing audio
-  document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
-
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  currentPage = id;
-
-  // update nav dots
-  const dots = document.querySelectorAll('.nav-dot');
-  pageOrder.forEach((name, i) => {
-    dots[i].classList.toggle('active', name === id);
+  // Jab user lyrics page se kisi aur page par move karega (jaise confession) tabhi BGM chalega
+  if (id !== 'landing' && id !== 'lyrics') {
+    startBGM();
+  } else {
+    // Landing aur Lyrics page par BGM humesha pause rahega
+    if (bgm) bgm.pause();
+  }
+  
+  // Lyrics cards ke baki saare individual audio tracks ko rokne ke liye
+  document.querySelectorAll('audio').forEach(a => {
+    if (a.id !== 'bgm') {
+      a.pause();
+      a.currentTime = 0;
+    }
   });
 
-  // trigger fade-up animations
-  setTimeout(() => {
-    document.querySelectorAll('#page-' + id + ' .fade-up').forEach(el => el.classList.add('visible'));
-  }, 80);
-
-  // if lyrics page, play first audio
-  if (id === 'lyrics') {
-    setTimeout(() => playAudio(currentCard), 300);
+  if (currentPage === 'confession') {
+    const env = document.getElementById('theEnvelope');
+    if(env) env.classList.remove('opened');
+    const letter = document.getElementById('letterWrap');
+    if(letter) letter.classList.remove('open');
   }
 
-  window.scrollTo(0, 0);
+  // Sweep transition in
+  sweep.classList.remove('sweep-out');
+  sweep.classList.add('sweeping');
+  
+  setTimeout(() => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    currentPage = id;
+    
+    const dots = document.querySelectorAll('.nav-dot');
+    pageOrder.forEach((name, i) => dots[i].classList.toggle('active', name === id));
+    
+    setTimeout(() => document.querySelectorAll('#page-' + id + ' .fade-up').forEach(el => el.classList.add('visible')), 80);
+    
+    if (id === 'lyrics') setTimeout(() => playAudio(currentCard), 300);
+    if (id === 'final')  setTimeout(launchConfetti, 400);
+    window.scrollTo(0, 0);
+    
+    // Sweep transition out
+    sweep.classList.remove('sweeping');
+    sweep.classList.add('sweep-out');
+    setTimeout(() => sweep.classList.remove('sweep-out'), 600);
+  }, 500);
 }
 
-// ══════════════════════════
-//  FLASHCARDS
-// ══════════════════════════
-let currentCard = 1;
-const totalCards = 5;
-
-function playAudio(cardNum) {
-  document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
-  const audio = document.getElementById('audio' + cardNum);
-  if (audio) audio.play().catch(() => {});
+// ── ENVELOPE ──
+function openEnvelope(){
+  const env=document.getElementById('theEnvelope');
+  if(env.classList.contains('opened'))return;
+  env.classList.add('opened');
+  setTimeout(()=>document.getElementById('letterWrap').classList.add('open'),700);
 }
 
-function updateCard(newCard, direction) {
-  document.getElementById('card-' + currentCard).classList.remove('active');
-  document.getElementById('card-' + newCard).classList.add('active');
-
-  currentCard = newCard;
-
-  // dots
-  document.querySelectorAll('.progress-dot').forEach((d, i) => {
-    d.classList.toggle('done', i < newCard);
+// ── FLASHCARDS ──
+let currentCard=1; const totalCards=5; let progressInterval=null;
+function playAudio(n){
+  document.querySelectorAll('audio').forEach(a=>{
+    if (a.id !== 'bgm') { a.pause(); a.currentTime = 0; }
   });
-
-  // counter
-  document.getElementById('cardCounter').textContent = newCard + ' / ' + totalCards;
-
-  // play audio
-  setTimeout(() => playAudio(newCard), 100);
-
-  // show next-page button after last card
-  document.getElementById('lyricsNextPage').style.display = newCard === totalCards ? 'flex' : 'none';
-  document.getElementById('nextBtn').style.display = newCard === totalCards ? 'none' : '';
-  document.getElementById('prevBtn').style.display = newCard === 1 ? 'none' : '';
+  clearInterval(progressInterval);
+  const audio=document.getElementById('audio'+n);
+  if(!audio)return;
+  audio.play().catch(()=>{});
+  progressInterval=setInterval(()=>{
+    if(audio.duration){
+      const bar=document.getElementById('prog'+n);
+      if(bar) bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+    }
+  },500);
 }
 
-function nextCard() {
-  if (currentCard < totalCards) updateCard(currentCard + 1, 'next');
+function updateCard(n){
+  document.getElementById('card-'+currentCard).classList.remove('active');
+  document.getElementById('card-'+n).classList.add('active');
+  currentCard=n;
+  document.querySelectorAll('.progress-dot').forEach((d,i)=>d.classList.toggle('done',i<n));
+  document.getElementById('cardCounter').textContent=n+' / '+totalCards;
+  setTimeout(()=>playAudio(n),100);
+  document.getElementById('lyricsNextPage').style.display=n===totalCards?'flex':'none';
+  document.getElementById('nextBtn').style.display=n===totalCards?'none':'';
+  document.getElementById('prevBtn').style.display=n===1?'none':'';
 }
+function nextCard(){if(currentCard<totalCards)updateCard(currentCard+1);}
+function prevCard(){if(currentCard>1)updateCard(currentCard-1);}
+document.getElementById('prevBtn').style.display='none';
 
-function prevCard() {
-  if (currentCard > 1) updateCard(currentCard - 1, 'prev');
-}
-
-// hide prev on load
-document.getElementById('prevBtn').style.display = 'none';
-
-// ══════════════════════════
-//  VIDEO
-// ══════════════════════════
-function playVideo() {
-  const thumb = document.getElementById('videoThumb');
-  const video = document.getElementById('mainVideo');
-  thumb.style.display = 'none';
-  video.style.display = 'block';
-  video.play().catch(() => {});
+// ── CONFETTI ──
+function launchConfetti(){
+  const pieces=['🌸','💗','✨','🌺','💕','⭐','🎀','💖'];
+  for(let i=0;i<50;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      el.textContent=pieces[Math.floor(Math.random()*pieces.length)];
+      el.style.left=Math.random()*100+'vw';
+      el.style.top='-30px';
+      el.style.fontSize=(14+Math.random()*16)+'px';
+      el.style.animationDuration=(2.5+Math.random()*2)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),5000);
+    },i*55);
+  }
 }
 </script>
 </body>
